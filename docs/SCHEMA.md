@@ -30,8 +30,9 @@ Each field is a separate pushdata:
 
 ## Covenant Enforcement
 
-The locking script (sCrypt contract) enforces:
+The locking script (sCrypt contract) has two methods:
 
+### claim (reproduce)
 1. **Propagation**: Output 0 must have the same locking script as the input
 2. **Budget**: Output 0 value = input value - reward - fee
 3. **Generation**: Counter increments by exactly 1
@@ -40,6 +41,14 @@ The locking script (sCrypt contract) enforces:
 6. **Death**: If next balance < dust limit, no continuation output (organism dies)
 
 The miner fee is implicit: input value - sum of output values = fee.
+
+### fund (feed)
+1. **Propagation**: Output 0 must have the same locking script
+2. **Balance increase**: Output 0 value must be greater than input value
+3. **No reproduction**: Generation stays the same, no reward paid
+4. **OP_RETURN**: Output 1 with same ORG1 data (unchanged generation)
+
+The funder provides additional inputs to cover the increased balance + miner fee.
 
 ## Discovery
 

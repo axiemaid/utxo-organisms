@@ -26,6 +26,9 @@ node spawn.cjs --type 0 --budget 100000 --reward 1000 --fee 3000
 # Trigger reproduction on a living organism
 node claim.cjs --txid <organism-txid> --address <your-bsv-address>
 
+# Feed an organism (extend its life)
+node fund.cjs --txid <organism-txid> --amount 50000 --wallet wallet.json
+
 # Scan all known organisms
 node scanner.cjs
 ```
@@ -74,6 +77,7 @@ See [docs/SCHEMA.md](docs/SCHEMA.md) for the full specification.
 | `wallet.cjs` | Create a wallet, show address, check balance |
 | `spawn.cjs` | Deploy a new organism to mainnet |
 | `claim.cjs` | Trigger reproduction on a living organism |
+| `fund.cjs` | Feed an organism — increase its balance, extend its life |
 | `scanner.cjs` | Find and trace all ORG1 organisms |
 
 ## Why

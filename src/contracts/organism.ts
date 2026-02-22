@@ -23,6 +23,9 @@ import {
  *
  * When balance drops below dust, the organism dies (no continuation output).
  *
+ * Fund method allows anyone to feed the organism (increase its balance)
+ * without triggering reproduction. Generation stays the same.
+ *
  * OP_RETURN schema:
  *   OP_FALSE OP_RETURN "ORG1" <type:1B> <generation:4B LE> <spawnTxid:32B>
  */
@@ -102,6 +105,43 @@ export class Organism extends SmartContract {
 
         // Reward output to claimer
         outputs += Utils.buildPublicKeyHashOutput(claimerPkh, this.reward)
+
+        assert(
+            this.ctx.hashOutputs == hash256(outputs),
+            'hashOutputs mismatch'
+        )
+    }
+
+    @method()
+    public fund(newBalance: bigint, changePkh: PubKeyHash, changeAmount: bigint) {
+        // Feed the organism — increase its balance without reproducing.
+        // Funder provides inputs to cover the new balance + fee.
+        // Generation does not increment. No reward is paid.
+
+        // New balance must be greater than current
+        assert(newBalance > this.ctx.utxo.value, 'must increase balance')
+
+        // Output 0: organism with higher balance, same state
+        let outputs: ByteString = this.buildStateOutput(newBalance)
+
+        // Output 1: OP_RETURN (same gen, no increment)
+        const opReturnScript: ByteString =
+            toByteString('006a') +
+            toByteString('04') +
+            toByteString('4f524731') +
+            toByteString('01') +
+            int2ByteString(this.organismType, 1n) +
+            toByteString('04') +
+            int2ByteString(this.generation, 4n) +
+            toByteString('20') +
+            this.spawnTxid
+
+        outputs += Utils.buildOutput(opReturnScript, 0n)
+
+        // Output 2: change back to funder (if any)
+        if (changeAmount > 0n) {
+            outputs += Utils.buildPublicKeyHashOutput(changePkh, changeAmount)
+        }
 
         assert(
             this.ctx.hashOutputs == hash256(outputs),

@@ -1,0 +1,20 @@
+{
+  "name": "utxo-organisms",
+  "version": "0.1.0",
+  "description": "Framework for spawning and tracking programmable UTXO organisms on BSV",
+  "scripts": {
+    "compile": "npx scrypt-cli compile -i src/contracts/organism.ts"
+  },
+  "keywords": ["bsv", "utxo", "covenant", "scrypt", "organism"],
+  "author": "axiemaid",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "scrypt-cli": "^0.2.3",
+    "scrypt-ts": "^1.4.5",
+    "scrypt-ts-transpiler": "^1.2.29",
+    "ts-node": "^10.9.2",
+    "ts-patch": "^3.3.0",
+    "typescript": "^5.3.3"
+  }
+}

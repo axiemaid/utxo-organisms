@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/contracts/organism.ts"
+  ],
+  "compilerOptions": {
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "target": "ESNext",
+    "esModuleInterop": true
+  }
+}
